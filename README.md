@@ -1,1 +1,1 @@
-# langchain-develop-llm-powered-applications-with-langchain-course
+# LangChain - Develop LLM powered applications with LangChain
