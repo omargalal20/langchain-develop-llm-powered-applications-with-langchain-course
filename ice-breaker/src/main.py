@@ -1,5 +1,3 @@
-from langchain_core.exceptions import LangChainException
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from loguru import logger
 
@@ -43,7 +41,6 @@ def main():
     cleaned_markdown = clean_markdown(scraped_information.markdown)
     scraped_metadata = scraped_information.metadata
 
-
     logger.info(f"Scraped Metadata: {scraped_metadata}")
 
     # Prepare template variables
@@ -53,19 +50,7 @@ def main():
 
     logger.info(f"Template Variables: {template_vars}")
 
-    # Generate output using LLM
-    try:
-        llm = llm_client.get_llm()
-        chain = prompt_template | llm | StrOutputParser()
-
-        response = chain.invoke(template_vars)
-        logger.info(f"Response: \n{response}")
-    except LangChainException as e:
-        logger.error(f"LLM failed to generate response: {str(e)}")
-        raise RuntimeError("LLM failed to generate response.") from e
-    except Exception as e:
-        logger.error(f"Unexpected error occurred during generation: {e}")
-        raise
+    llm_client.generate_response(prompt_template, template_vars)
 
 
 if __name__ == "__main__":
