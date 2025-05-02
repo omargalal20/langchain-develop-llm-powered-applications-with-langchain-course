@@ -28,6 +28,8 @@ class Settings(BaseSettings):
     LANGSMITH_API_KEY: str
     LANGSMITH_PROJECT: str
 
+    FIRECRAWL_API_KEY: str
+
     class Config:
         env_file = get_env_filename()
         env_file_encoding = "utf-8"
