@@ -1,7 +1,7 @@
 [project]
 name = "ice-breaker"
 version = "0.0.1"
-description = "Ice breaker"
+description = "Health Professional Ice Breaker"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
