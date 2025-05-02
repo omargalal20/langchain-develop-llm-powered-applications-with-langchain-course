@@ -31,12 +31,12 @@ class LLMClient:
         """Return the configured LLM instance."""
         return self.llm
 
-    def generate_response(self, prompt_template: PromptTemplate, template_vars: dict):
+    def generate_response(self, prompt_template: PromptTemplate, template_vars: dict) -> str:
         # Generate output using LLM
         try:
             chain = prompt_template | self.llm | StrOutputParser()
             response = chain.invoke(template_vars)
-            logger.info(f"Response: \n{response}")
+            return response
         except LangChainException as e:
             logger.error(f"LLM failed to generate response: {str(e)}")
             raise RuntimeError("LLM failed to generate response.") from e

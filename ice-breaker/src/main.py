@@ -50,7 +50,9 @@ def main():
 
     logger.info(f"Template Variables: {template_vars}")
 
-    llm_client.generate_response(prompt_template, template_vars)
+    response = llm_client.generate_response(prompt_template, template_vars)
+
+    logger.info(f"Response: \n{response}")
 
 
 if __name__ == "__main__":
