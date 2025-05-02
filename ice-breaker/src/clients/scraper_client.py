@@ -21,7 +21,7 @@ class ScraperClient:
 
     def scrape_research_gate_profile(self, profile_url: str) -> ScrapeResponse:
         """
-        Scrape information from ResearchGate profiles,
+        Scrape information from ResearchGate profile,
         Manually scrape the information from the ResearchGate profile
         """
         logger.info(f"Attempting to scrape ResearchGate profile: {profile_url}")
