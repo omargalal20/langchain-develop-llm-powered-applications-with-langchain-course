@@ -1,16 +1,20 @@
+from firecrawl.firecrawl import ScrapeResponse
 from langchain_core.prompts import PromptTemplate
 from loguru import logger
 
+from agents.research_gate_lookup_agent import ResearchGateLookupAgent
+from clients.langsmith_client import LangSmithClient
 from clients.llm_client import LLMClient
 from clients.scraper_client import ScraperClient
 from utils import clean_markdown
 
-llm_client = LLMClient()
-scraper_client = ScraperClient()
 
-
-def main():
+def ice_break_with(name: str) -> str:
     logger.info("Hello from ResearchGate Ice-Breaker!")
+
+    research_gate_profile_url = research_gate_lookup_agent.lookup(f"{name} ResearchGate")
+
+    logger.info(f"research_gate_profile_url: {research_gate_profile_url}")
 
     # Define the prompt template
     summary_template = """
@@ -29,31 +33,30 @@ def main():
 
     # Scrape information
     try:
-        scraped_information = scraper_client.scrape_research_gate_profile(
-            "https://www.researchgate.net/profile/Atsunori-Kashiwagi-3?_sg=FJybbQK0-mm6yrxtVHN5nbhL8h1qUojyDdIt-xjmeR2H0xqpjHbgwN4HAhflngfMDCx0Vc5znnIOjwo&_tp=eyJjb250ZXh0Ijp7ImZpcnN0UGFnZSI6InNpZ251cCIsInBhZ2UiOiJfZGlyZWN0In19"
-        )
+        scraped_information: ScrapeResponse = scraper_client.scrape_research_gate_profile(research_gate_profile_url)
         if not scraped_information:
             raise ValueError("No information was scraped. Ensure the profile URL is valid.")
     except Exception as e:
         logger.error(f"Failed to scrape ResearchGate profile: {e}")
-        return
 
     cleaned_markdown = clean_markdown(scraped_information.markdown)
-    scraped_metadata = scraped_information.metadata
-
-    logger.info(f"Scraped Metadata: {scraped_metadata}")
 
     # Prepare template variables
     template_vars = {
         "information": cleaned_markdown
     }
 
-    logger.info(f"Template Variables: {template_vars}")
-
     response = llm_client.generate_response(prompt_template, template_vars)
 
-    logger.info(f"Response: \n{response}")
+    return response
 
 
 if __name__ == "__main__":
-    main()
+    llm_client = LLMClient()
+    scraper_client = ScraperClient()
+    langsmith_client = LangSmithClient()
+    research_gate_lookup_agent = ResearchGateLookupAgent()
+
+    ice_breaker = ice_break_with("Yasser Shoukry")
+
+    logger.info(f"Response: \n{ice_breaker}")

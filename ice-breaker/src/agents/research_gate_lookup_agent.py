@@ -1,0 +1,51 @@
+from langgraph.prebuilt import create_react_agent
+from loguru import logger
+
+from clients.langsmith_client import LangSmithClient
+from clients.llm_client import LLMClient
+from config.settings import get_settings
+from tools.tavily import get_profile_urls_tavily
+
+settings = get_settings()
+
+
+class ResearchGateLookupAgent:
+    """
+    ResearchGateLookupAgent
+    """
+
+    def __init__(self):
+        """
+        Initialize ResearchGateLookupAgent configuration.
+        """
+        llm_client = LLMClient()
+        langsmith_client = LangSmithClient()
+
+        self.agent_name = "ResearchGateLookupAgent"
+        self.llm = llm_client.get_llm()
+        self.react_prompt = langsmith_client.get_prompt("hwchase17/react")
+
+    def lookup(self, researcher_name: str) -> str:
+        """
+        Lookup for ResearchGate profile
+        """
+        logger.info(f"{self.agent_name} attempting to lookup ResearchGate profile for: {researcher_name}")
+
+        tools_for_agent = [get_profile_urls_tavily]
+
+        system_message = "You are a precise and efficient assistant for retrieving the correct ResearchGate profile URL based on researcher name."
+        query = f"Given the full name {researcher_name} I want you to get it me a link to their ResearchGate profile page. Your answer should contain only a URL"
+
+        agent = create_react_agent(name=self.agent_name, model=self.llm, prompt=system_message, tools=tools_for_agent)
+
+        # for step in langgraph_agent_executor.stream(
+        #         {"messages": query},
+        #         stream_mode="values",
+        # ):
+        #     step["messages"][-1].pretty_print()
+
+        result = agent.invoke(
+            {"messages": query}
+        )
+
+        return result["messages"][-1].content

@@ -30,6 +30,8 @@ class Settings(BaseSettings):
 
     FIRECRAWL_API_KEY: str
 
+    TAVILY_API_KEY: str
+
     class Config:
         env_file = get_env_filename()
         env_file_encoding = "utf-8"
