@@ -1,10 +1,10 @@
 from langchain_aws import ChatBedrockConverse
 from langchain_core.exceptions import LangChainException
-from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import PromptTemplate
 from loguru import logger
 
 from config.settings import get_settings
+from output_parsers import summary_parser, Summary
 
 settings = get_settings()
 
@@ -31,10 +31,10 @@ class LLMClient:
         """Return the configured LLM instance."""
         return self.llm
 
-    def generate_response(self, prompt_template: PromptTemplate, template_vars: dict) -> str:
+    def generate_response(self, prompt_template: PromptTemplate, template_vars: dict) -> Summary:
         # Generate output using LLM
         try:
-            chain = prompt_template | self.llm | StrOutputParser()
+            chain = prompt_template | self.llm | summary_parser
             response = chain.invoke(template_vars)
             return response
         except LangChainException as e:

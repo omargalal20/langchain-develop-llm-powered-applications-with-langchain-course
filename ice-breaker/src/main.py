@@ -6,10 +6,11 @@ from agents.research_gate_lookup_agent import ResearchGateLookupAgent
 from clients.langsmith_client import LangSmithClient
 from clients.llm_client import LLMClient
 from clients.scraper_client import ScraperClient
+from output_parsers import summary_parser, Summary
 from utils import clean_markdown
 
 
-def ice_break_with(name: str) -> str:
+def ice_break_with(name: str) -> Summary:
     logger.info("Hello from ResearchGate Ice-Breaker!")
 
     research_gate_profile_url = research_gate_lookup_agent.lookup(f"{name} ResearchGate")
@@ -24,11 +25,15 @@ def ice_break_with(name: str) -> str:
         Create:
         1. A concise summary of their professional focus and contributions.
         2. Two personalized ice breakers for starting a conversation, focusing on their research or interests.
+        
+        Output Format:
+        \n{format_instructions}
     """
 
     prompt_template = PromptTemplate(
         input_variables=["information"],
-        template=summary_template
+        template=summary_template,
+        partial_variables={"format_instructions": summary_parser.get_format_instructions()},
     )
 
     # Scrape information
@@ -57,6 +62,6 @@ if __name__ == "__main__":
     langsmith_client = LangSmithClient()
     research_gate_lookup_agent = ResearchGateLookupAgent()
 
-    ice_breaker = ice_break_with("Yasser Shoukry")
+    ice_breaker = ice_break_with("Shadnaz Asgari")
 
     logger.info(f"Response: \n{ice_breaker}")
