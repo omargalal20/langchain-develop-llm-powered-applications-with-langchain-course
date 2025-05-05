@@ -3,7 +3,7 @@ from loguru import logger
 
 from business.clients.langsmith_client import LangSmithClient
 from business.clients.llm_client import LLMClient
-from business.tools.tavily import get_profile_urls_tavily
+from business.tools.tavily import get_research_gate_profile_urls
 from config.settings import get_settings
 
 settings = get_settings()
@@ -33,7 +33,7 @@ class ResearchGateLookupAgent:
         """
         logger.info(f"{self.agent_name} attempting to lookup ResearchGate profile for: {researcher_name}")
 
-        tools_for_agent = [get_profile_urls_tavily]
+        tools_for_agent = [get_research_gate_profile_urls]
 
         system_message = "You are a precise and efficient assistant for retrieving the correct ResearchGate profile URL based on researcher name."
         query = f"Given the full name {researcher_name} I want you to get it me a link to their ResearchGate profile page. Your answer should contain only a URL"

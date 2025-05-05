@@ -33,13 +33,13 @@ class OrchestratorService:
 
     def ice_break_with(self, name: str) -> IceBreakerResponse:
         """
-        Generate a personalized icebreaker for a healthcare professional based on their ResearchGate profile.
+        Generate a personalized icebreaker for a researcher based on their ResearchGate profile.
 
         Parameters:
-        - name (str): Full name of the healthcare professional.
+        - name (str): Full name of the researcher.
 
         Returns:
-        - Summary: Contains the professional's summary and two personalized icebreakers.
+        - Summary: Contains the researcher's summary and two personalized icebreakers.
 
         Raises:
         - ValueError: If no information is retrieved from ResearchGate.
@@ -72,7 +72,7 @@ class OrchestratorService:
 
         # Define the prompt template
         summary_template = """
-            Given the following ResearchGate information about a healthcare professional:
+            Given the following ResearchGate information about a researcher:
             {information}
 
             Create:

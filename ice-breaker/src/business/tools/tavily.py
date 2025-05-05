@@ -16,8 +16,8 @@ class ResearchGateProfile(BaseModel):
 
 
 @tool("get_research_gate_profile_urls", parse_docstring=True)
-def get_profile_urls_tavily(name: str) -> List[ResearchGateProfile]:
-    """Searches for ResearchGate Profile Pages.
+def get_research_gate_profile_urls(name: str) -> List[ResearchGateProfile]:
+    """Searches for ResearchGate Profile Pages using Tavily.
 
     Args:
         name: The name of the researcher to search for.
