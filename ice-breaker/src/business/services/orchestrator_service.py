@@ -70,8 +70,6 @@ class OrchestratorService:
 
         cleaned_markdown = clean_markdown(scraped_information.markdown)
 
-        logger.info(f"Scraped Metadata: \n{scraped_information.metadata["twitter:url"]}")
-
         # Define the prompt template
         summary_template = """
             Given the following ResearchGate information about a healthcare professional:
