@@ -35,4 +35,3 @@ class ScraperClient:
             logger.error(f"HTTPError occurred while scraping: {e.response.status_code}, {e.response.text}")
         except Exception as e:
             logger.error(f"An unexpected error occurred: {str(e)}")
-

@@ -5,6 +5,7 @@ description = "Health Professional Ice Breaker"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi[standard]>=0.115.12",
     "firecrawl-py>=2.5.3",
     "langchain>=0.3.24",
     "langchain-aws>=0.2.22",

@@ -1,18 +1,21 @@
+from typing import List
+
 from langchain_core.tools import tool
 from langchain_tavily import TavilySearch
 from pydantic import BaseModel
-from typing import List
 
 from config.settings import get_settings
 
 settings = get_settings()
+
 
 class ResearchGateProfile(BaseModel):
     title: str
     url: str
     score: float
 
-@tool("get_researchgate_profile_urls", parse_docstring=True)
+
+@tool("get_research_gate_profile_urls", parse_docstring=True)
 def get_profile_urls_tavily(name: str) -> List[ResearchGateProfile]:
     """Searches for ResearchGate Profile Pages.
 

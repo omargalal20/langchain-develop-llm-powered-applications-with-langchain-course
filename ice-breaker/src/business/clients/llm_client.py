@@ -3,8 +3,8 @@ from langchain_core.exceptions import LangChainException
 from langchain_core.prompts import PromptTemplate
 from loguru import logger
 
+from business.output_parsers.ice_breaker import summary_parser, Summary
 from config.settings import get_settings
-from output_parsers import summary_parser, Summary
 
 settings = get_settings()
 
@@ -18,7 +18,6 @@ class LLMClient:
             self.llm = ChatBedrockConverse(
                 model_id=settings.MODEL_ID,
                 temperature=settings.MODEL_TEMPERATURE,
-                max_tokens=settings.MODEL_MAX_TOKENS,
                 aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                 aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
                 region_name=settings.AWS_REGION,

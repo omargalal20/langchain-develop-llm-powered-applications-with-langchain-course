@@ -1,10 +1,10 @@
 from langgraph.prebuilt import create_react_agent
 from loguru import logger
 
-from clients.langsmith_client import LangSmithClient
-from clients.llm_client import LLMClient
+from business.clients.langsmith_client import LangSmithClient
+from business.clients.llm_client import LLMClient
+from business.tools.tavily import get_profile_urls_tavily
 from config.settings import get_settings
-from tools.tavily import get_profile_urls_tavily
 
 settings = get_settings()
 
@@ -14,12 +14,14 @@ class ResearchGateLookupAgent:
     ResearchGateLookupAgent
     """
 
-    def __init__(self):
+    def __init__(
+            self,
+            llm_client: LLMClient,
+            langsmith_client: LangSmithClient,
+    ):
         """
         Initialize ResearchGateLookupAgent configuration.
         """
-        llm_client = LLMClient()
-        langsmith_client = LangSmithClient()
 
         self.agent_name = "ResearchGateLookupAgent"
         self.llm = llm_client.get_llm()

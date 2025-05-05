@@ -1,6 +1,8 @@
 import os
 from functools import lru_cache
+from typing import Sequence
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -21,7 +23,6 @@ class Settings(BaseSettings):
 
     MODEL_ID: str
     MODEL_TEMPERATURE: float
-    MODEL_MAX_TOKENS: int
 
     LANGSMITH_TRACING: str
     LANGSMITH_ENDPOINT: str
@@ -32,9 +33,17 @@ class Settings(BaseSettings):
 
     TAVILY_API_KEY: str
 
+    CORS_ORIGINS: Sequence[str]
+
     class Config:
         env_file = get_env_filename()
         env_file_encoding = "utf-8"
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    def parse_origins(cls, value):
+        if isinstance(value, str):
+            return [origin.strip() for origin in value.split(",")]
+        return value
 
 
 @lru_cache
