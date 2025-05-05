@@ -1,0 +1,12 @@
+name: langchain-course
+
+services:
+  ice-breaker:
+    container_name: ice-breaker
+    build:
+      context: .  # Path to the directory with the Dockerfile
+      dockerfile: ./Dockerfile
+    ports:
+      - "${APP_PORT}:${APP_PORT}"  # Ensure APP_PORT is defined in your .env
+    env_file:
+      - .env

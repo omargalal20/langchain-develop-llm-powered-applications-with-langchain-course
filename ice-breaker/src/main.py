@@ -46,4 +46,4 @@ app.include_router(health.router, prefix="/api/v1", tags=["Health"])
 app.include_router(ice_breaker.router, prefix="/api/v1", tags=["Ice Breaker"])
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=settings.APP_PORT)

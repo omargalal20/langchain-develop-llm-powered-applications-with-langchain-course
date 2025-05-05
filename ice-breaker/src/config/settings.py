@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     ENVIRONMENT: str
     APP_NAME: str
     APP_VERSION: str
+    APP_PORT: int
 
     AWS_ACCESS_KEY_ID: str
     AWS_SECRET_ACCESS_KEY: str
