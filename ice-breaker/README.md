@@ -50,8 +50,7 @@ The agent will generate personalized icebreakers tailored to their research, ini
 1. **Clone the repository**
     - cd into ice-breaker:
       ``` 
-      cd backend
-
+      cd ice-breaker
 2. **Create `.env` File:**
     - Create a `.env` file inside the `./app` directory, where it contains source code.
     - Add the following content to the `.env` file based on `.env.template`:

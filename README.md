@@ -14,7 +14,7 @@ project directories.
 The **Researcher Ice Breaker** project is a LangChain-powered agent designed to generate personalized icebreakers for
 healthcare professionals. Given a healthcare professional's **ResearchGate profile**, the agent searches ResearchGate to
 find academic profiles, conference participation, and publications. It will then generate tailored icebreakers based on
-the individual's research, healthcare initiatives, or affiliations.
+the individual's research, initiatives, or affiliations.
 
 #### Features:
 
