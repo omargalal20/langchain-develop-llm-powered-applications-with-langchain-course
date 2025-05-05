@@ -20,9 +20,9 @@
           style="width: 100px; height: 100px; border-radius: 50%; border-width: 12px;"></span>
 </div>
 <main id="result" style="display: none">
-    <div style="text-align: center">
-        <img id="profile-pic" src="" alt="Profile Picture"
-             style="width: 300px; max-width: 100%; height: auto; border-radius: 50%; margin-bottom: 20px;">
+    <div>
+        <h2>Name</h2>
+        <p id="research-gate-profile-name"></p>
     </div>
     <div>
         <h2>ResearchGate Profile URL</h2>
@@ -61,7 +61,6 @@
         const name = formData.get("name"); // Extract the 'name' field value
         console.log(name);
 
-
         fetch("http://127.0.0.1:8000/api/v1/ice-breaker/generate", {
             method: "POST",
             headers: {
@@ -75,8 +74,7 @@
             })
             .then(data => {
                 console.log(data);
-
-<!--                        document.getElementById("profile-pic").src = data.picture_url;-->
+                        document.getElementById("research-gate-profile-name").textContent = name;
                         const researchGateProfileUrlElement = document.getElementById("research-gate-profile-url");
                         researchGateProfileUrlElement.href = data.research_gate_profile_url;
                         researchGateProfileUrlElement.textContent = data.research_gate_profile_url;
