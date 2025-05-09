@@ -1,8 +1,9 @@
 # Researcher Ice Breaker
 
-A LangChain agent that, given a healthcare professional's ResearchGate profile, searches ResearchGate to find academic
-profiles, conference participation, and publications.  
-The agent will generate personalized icebreakers tailored to their research, initiatives, or affiliations.
+The **Researcher Ice Breaker** project is a LangChain-powered agent designed to generate personalized icebreakers for
+research professionals. Given a research professional's **ResearchGate Name**, the agent searches ResearchGate to
+find academic profiles, conference participation, and publications. It will then generate tailored icebreakers based on
+the individual's research, initiatives, or affiliations.
 
 # Architecture
 
