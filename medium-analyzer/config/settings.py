@@ -16,6 +16,16 @@ class Settings(BaseSettings):
     APP_VERSION: str
 
     PINECONE_API_KEY: str
+    PINECONE_INDEX_NAME: str
+
+    AWS_ACCESS_KEY_ID: str
+    AWS_SECRET_ACCESS_KEY: str
+    AWS_REGION: str
+
+    EMBEDDING_MODEL_ID: str
+
+    MODEL_ID: str
+    MODEL_TEMPERATURE: float
 
     class Config:
         env_file = get_env_filename()

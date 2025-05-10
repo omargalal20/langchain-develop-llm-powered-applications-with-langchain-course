@@ -5,6 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "langchain>=0.3.25",
+    "langchain-aws>=0.2.23",
+    "langchain-community>=0.3.23",
+    "langchain-pinecone>=0.2.6",
     "loguru>=0.7.3",
     "pinecone>=6.0.2",
     "pydantic>=2.11.4",
