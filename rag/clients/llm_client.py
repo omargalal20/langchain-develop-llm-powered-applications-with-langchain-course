@@ -1,5 +1,5 @@
-from langchain.chains.retrieval import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains.retrieval import create_retrieval_chain
 from langchain_aws import ChatBedrockConverse
 from langchain_core.exceptions import LangChainException
 from langchain_core.output_parsers import StrOutputParser
@@ -46,14 +46,18 @@ class LLMClient:
             logger.error(f"Unexpected error occurred during generation: {e}")
             raise
 
-    def generate_rag_chain_response(self, retriever: VectorStoreRetriever, prompt_template: PromptTemplate,
-                              template_vars: dict) -> str:
+    def generate_predefined_rag_chain_response(self, retriever: VectorStoreRetriever, prompt_template: PromptTemplate,
+                                               template_vars: dict) -> str:
         # Generate output using LLM
         try:
+            logger.info("Retrieval")
+
             combine_docs_chain = create_stuff_documents_chain(
                 self.llm, prompt_template
             )
             retrieval_chain = create_retrieval_chain(retriever=retriever, combine_docs_chain=combine_docs_chain)
+
+            logger.info("Generation")
 
             response = retrieval_chain.invoke(input=template_vars)
             return response

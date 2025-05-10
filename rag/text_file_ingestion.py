@@ -20,6 +20,7 @@ def ingestion(vector_store: VectorStore):
     file_path = os.path.abspath("mediumblog1.txt")
 
     text_loader = TextLoader(
+
         file_path=file_path,
         encoding="utf-8"
     )

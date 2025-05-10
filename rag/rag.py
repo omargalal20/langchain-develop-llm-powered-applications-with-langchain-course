@@ -22,9 +22,7 @@ def retrieval(query: str, number_of_documents_to_retrieve: int, vector_store: Ve
     return results
 
 
-def generation(query: str, retriever: VectorStoreRetriever) -> str:
-    logger.info("Generation")
-
+def predefined_rag_chain_generation(query: str, retriever: VectorStoreRetriever) -> str:
     # Define the prompt template
     rag_prompt = """
         You are an assistant for question-answering tasks. Use the following pieces of retrieved context to answer the question. 
@@ -46,11 +44,11 @@ def generation(query: str, retriever: VectorStoreRetriever) -> str:
         template=rag_prompt,
     )
 
-    return llm_client.generate_rag_chain_response(retriever, rag_template, template_vars)
+    return llm_client.generate_predefined_rag_chain_response(retriever, rag_template, template_vars)
 
 
 if __name__ == "__main__":
-    logger.info("Hello from medium-analyzer!")
+    logger.info("Hello from RAG!")
 
     settings = get_settings()
     pc = Pinecone(api_key=settings.PINECONE_API_KEY)
@@ -67,8 +65,6 @@ if __name__ == "__main__":
     query: str = "What is Pinecone in machine learning"
     number_of_documents_to_retrieve: int = 4
 
-    # context = retrieval(query, number_of_documents_to_retrieve, vector_store)
-
-    response = generation(query, retriever)
+    response = predefined_rag_chain_generation(query, retriever)
 
     logger.info(f"Response: {response}")
