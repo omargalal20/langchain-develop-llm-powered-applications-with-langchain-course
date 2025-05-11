@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     settings = get_settings()
     pc = Pinecone(api_key=settings.PINECONE_API_KEY)
-    embeddings_model = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0",
+    embeddings_model = BedrockEmbeddings(model_id=settings.EMBEDDING_MODEL_ID,
                                          aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                                          aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
                                          region_name=settings.AWS_REGION)

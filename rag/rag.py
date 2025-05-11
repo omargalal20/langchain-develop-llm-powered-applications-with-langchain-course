@@ -1,6 +1,7 @@
 from langchain_aws import BedrockEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain_core.vectorstores import VectorStore, VectorStoreRetriever
+from langchain_community.vectorstores import FAISS
 from langchain_pinecone import PineconeVectorStore
 from loguru import logger
 from pinecone import Pinecone
@@ -47,24 +48,51 @@ def predefined_rag_chain_generation(query: str, retriever: VectorStoreRetriever)
     return llm_client.generate_predefined_rag_chain_response(retriever, rag_template, template_vars)
 
 
-if __name__ == "__main__":
-    logger.info("Hello from RAG!")
-
-    settings = get_settings()
+def get_pinecone_retriever() -> VectorStoreRetriever:
     pc = Pinecone(api_key=settings.PINECONE_API_KEY)
-    embeddings_model = BedrockEmbeddings(model_id="amazon.titan-embed-text-v2:0",
+    embeddings_model = BedrockEmbeddings(model_id=settings.EMBEDDING_MODEL_ID,
                                          aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                                          aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
                                          region_name=settings.AWS_REGION)
     index = pc.Index(settings.PINECONE_INDEX_NAME)
     vector_store: VectorStore = PineconeVectorStore(index_name=settings.PINECONE_INDEX_NAME, index=index,
                                                     embedding=embeddings_model)
-    llm_client = LLMClient()
     retriever: VectorStoreRetriever = vector_store.as_retriever()
+
+    return retriever
+
+
+def get_faiss_retriever() -> VectorStoreRetriever:
+    pc = Pinecone(api_key=settings.PINECONE_API_KEY)
+    embeddings_model = BedrockEmbeddings(model_id=settings.EMBEDDING_MODEL_ID,
+                                         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                                         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                                         region_name=settings.AWS_REGION)
+    new_vectorstore = FAISS.load_local(
+        "faiss_index", embeddings_model, allow_dangerous_deserialization=True
+    )
+    retriever: VectorStoreRetriever = new_vectorstore.as_retriever()
+
+    return retriever
+
+
+if __name__ == "__main__":
+    logger.info("Hello from RAG!")
+
+    settings = get_settings()
+    llm_client = LLMClient()
 
     query: str = "What is Pinecone in machine learning"
     number_of_documents_to_retrieve: int = 4
 
-    response = predefined_rag_chain_generation(query, retriever)
+    pinecone_retriever: VectorStoreRetriever = get_pinecone_retriever()
 
-    logger.info(f"Response: {response}")
+    text_rag_response = predefined_rag_chain_generation(query, pinecone_retriever)
+
+    logger.info(f"Text RAG Response: {text_rag_response}")
+
+    faiss_retriever = get_faiss_retriever()
+
+    pdf_rag_response = predefined_rag_chain_generation(query, faiss_retriever)
+
+    logger.info(f"PDF RAG Response: {pdf_rag_response}")
