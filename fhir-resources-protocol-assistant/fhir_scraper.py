@@ -50,6 +50,6 @@ def scrape_fhir(targeted_url: str, targeted_dir: str):
 
 if __name__ == "__main__":
     base_url = "https://hl7.org/fhir/R5/resourcelist.html"
-    output_dir = "../scraped_data/fhir"
+    output_dir = "scraped_data/fhir"
 
     scrape_fhir(base_url, output_dir)
