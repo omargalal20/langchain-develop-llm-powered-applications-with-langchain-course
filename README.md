@@ -27,13 +27,12 @@ the [Researcher Ice Breaker README](./ice-breaker/README.md).
 
 ---
 
-## Healthcare Protocol Assistant
+## FHIR Resources Protocol Assistant
 
-This application helps healthcare professionals quickly access relevant information about healthcare protocols,
-guidelines, or compliance regulations. It draws from trusted sources, including FHIR Documentation and HIPAA Compliance
-Resources, to deliver accurate and reliable insights.
+This application helps healthcare professionals quickly access relevant information about FHIR, specifically FHIR
+resources and how they are constructed. It draws from the FHIR Documentation to deliver accurate and reliable insights.
 
 For detailed setup, usage instructions, and API documentation, please visit
-the [Healthcare Protocol Assistant README](./healthcare-protocol-assistant/README.md).
+the [FHIR Resources Protocol Assistant README](fhir-resources-protocol-assistant/README.md).
 
 ---
