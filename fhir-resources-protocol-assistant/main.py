@@ -5,6 +5,7 @@ from loguru import logger
 from pinecone import Pinecone
 
 from business.clients.llm_client import LLMClient
+from business.schemas.llm import Response
 from business.services.orchestrator_service import OrchestratorService
 from config.settings import get_settings
 
@@ -32,9 +33,9 @@ if __name__ == "__main__":
     service = OrchestratorService(llm_client=llm_client, retriever=pinecone_retriever)
 
     correct_query: str = "Give me a real test example of a MedicationRequest resource in FHIR?"
-    response: str = service.response(query=correct_query)
-    logger.info(f"Correct Query Response: {response}")
+    response: Response = service.response(query=correct_query)
+    logger.info(f"Correct Query Response: {response.answer}")
 
     wrong_query = "How many implementation guides are available for FHIR in the current version?"
-    response: str = service.response(query=wrong_query)
-    logger.info(f"Wrong Query Response: {response}")
+    response: Response = service.response(query=wrong_query)
+    logger.info(f"Wrong Query Response: {response.answer}")

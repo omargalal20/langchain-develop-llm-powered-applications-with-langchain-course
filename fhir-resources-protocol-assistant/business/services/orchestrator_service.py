@@ -6,6 +6,7 @@ from langchain_core.vectorstores import VectorStoreRetriever
 from loguru import logger
 
 from business.clients.llm_client import LLMClient
+from business.schemas.llm import Response
 
 
 class OrchestratorService:
@@ -25,7 +26,7 @@ class OrchestratorService:
         self.llm = llm_client.get_llm()
         self.retriever: VectorStoreRetriever = retriever
 
-    def response(self, query: str) -> str:
+    def response(self, query: str) -> Response:
 
         rag_prompt = """
             You are a knowledgeable FHIR expert and assistant specializing in healthcare standards and protocols. 
@@ -61,7 +62,11 @@ class OrchestratorService:
             logger.info("Generation")
 
             response = retrieval_chain.invoke(input=template_vars)
-            return response
+            return Response(
+                input=response["input"],
+                answer=response["answer"],
+                context=response["context"],
+            )
         except LangChainException as e:
             logger.error(f"LLM failed to generate response: {str(e)}")
             raise RuntimeError("LLM failed to generate response.") from e
