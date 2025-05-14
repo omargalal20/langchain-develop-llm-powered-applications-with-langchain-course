@@ -1,12 +1,7 @@
 from typing import List
 
+from langchain_core.documents import Document
 from pydantic import BaseModel
-
-
-class Document(BaseModel):
-    id: str
-    metadata: dict
-    page_content: str
 
 
 class Response(BaseModel):

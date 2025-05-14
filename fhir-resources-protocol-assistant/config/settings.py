@@ -27,6 +27,8 @@ class Settings(BaseSettings):
     MODEL_ID: str
     MODEL_TEMPERATURE: float
 
+    VECTOR_STORE_NUMBER_OF_DOCUMENTS_TO_RETRIEVE: int
+
     class Config:
         env_file = get_env_filename()
         env_file_encoding = "utf-8"
