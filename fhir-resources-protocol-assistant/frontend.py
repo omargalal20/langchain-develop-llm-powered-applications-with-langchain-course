@@ -33,8 +33,28 @@ def create_sources_string(source_urls: Set[str]) -> str:
     return sources_string
 
 
-# Streamlit app
-st.header("LangChain Udemy Course - FHIR Resources Protocol Assistant")
+# Sidebar
+with st.sidebar:
+    st.markdown("# 🏥 About")
+    st.markdown("""
+    ### FHIR Resources Protocol Assistant
+    
+    This AI assistant helps you understand and work with FHIR (Fast Healthcare Interoperability Resources) protocols and standards. 
+    
+    **Features:**
+    - Ask questions about FHIR resources
+    - Get explanations of FHIR protocols
+    - Access relevant documentation sources
+    
+    Built with:
+    - Streamlit
+    - LangChain
+    - Pinecone
+    - AWS Bedrock
+    """)
+
+# Main content
+st.header("🏥 LangChain Udemy Course - FHIR Resources Protocol Assistant")
 
 # Initialize session state for prompts and responses if not already done
 if (
@@ -47,7 +67,8 @@ if (
     st.session_state["chat_history"] = []
 
 # Input prompt
-prompt = st.text_input("Prompt", placeholder="Enter your prompt here..")
+prompt = st.chat_input("Enter your prompt here..")
+
 
 logger.info(f"Prompt: {prompt}")
 
