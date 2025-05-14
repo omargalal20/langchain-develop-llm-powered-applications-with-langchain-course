@@ -29,6 +29,11 @@ class Settings(BaseSettings):
 
     VECTOR_STORE_NUMBER_OF_DOCUMENTS_TO_RETRIEVE: int
 
+    LANGSMITH_TRACING: str
+    LANGSMITH_ENDPOINT: str
+    LANGSMITH_API_KEY: str
+    LANGSMITH_PROJECT: str
+
     class Config:
         env_file = get_env_filename()
         env_file_encoding = "utf-8"

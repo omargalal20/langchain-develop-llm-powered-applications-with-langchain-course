@@ -4,6 +4,7 @@ import streamlit as st
 from langchain_core.vectorstores import VectorStoreRetriever
 from loguru import logger
 
+from business.clients.langsmith_client import LangSmithClient
 from business.clients.llm_client import LLMClient
 from business.clients.vector_store_client import VectorStoreClient
 from business.schemas.llm import Response
@@ -14,10 +15,11 @@ from config.settings import get_settings
 settings = get_settings()
 llm_client = LLMClient()
 vector_store_client = VectorStoreClient()
+langsmith_client = LangSmithClient()
 
 retriever: VectorStoreRetriever = vector_store_client.get_retriever(
     settings.VECTOR_STORE_NUMBER_OF_DOCUMENTS_TO_RETRIEVE)
-service = OrchestratorService(llm_client=llm_client, retriever=retriever)
+service = OrchestratorService(llm_client=llm_client, retriever=retriever, langsmith_client=langsmith_client)
 
 
 def create_sources_string(source_urls: Set[str]) -> str:
@@ -32,14 +34,17 @@ def create_sources_string(source_urls: Set[str]) -> str:
 
 
 # Streamlit app
-st.header("LangChain Udemy Course - Documentation Helper Bot")
+st.header("LangChain Udemy Course - FHIR Resources Protocol Assistant")
 
 # Initialize session state for prompts and responses if not already done
-if "user_prompt_history" not in st.session_state:
-    st.session_state["user_prompt_history"] = []
-
-if "chat_answers_history" not in st.session_state:
+if (
+        "chat_answers_history" not in st.session_state
+        and "user_prompt_history" not in st.session_state
+        and "chat_history" not in st.session_state
+):
     st.session_state["chat_answers_history"] = []
+    st.session_state["user_prompt_history"] = []
+    st.session_state["chat_history"] = []
 
 # Input prompt
 prompt = st.text_input("Prompt", placeholder="Enter your prompt here..")
@@ -48,9 +53,7 @@ logger.info(f"Prompt: {prompt}")
 
 if prompt:
     with st.spinner("Generating response.."):
-        response: Response = service.response(query=prompt)
-
-        logger.info(f"Response: {response.answer}")
+        response: Response = service.response(query=prompt, chat_history=st.session_state["chat_history"])
 
         sources = set(
             [doc.metadata["source"] for doc in response.context]
@@ -60,9 +63,13 @@ if prompt:
             f"{response.answer} \n\n {create_sources_string(sources)}"
         )
 
+        logger.info(f"AI Response: {response.answer}")
+
         # Save prompt and response to session state
         st.session_state["user_prompt_history"].append(prompt)
         st.session_state["chat_answers_history"].append(formatted_response)
+        st.session_state["chat_history"].append(("human", prompt))
+        st.session_state["chat_history"].append(("ai", response.answer))
 
 if st.session_state["chat_answers_history"]:
     for generated_response, user_query in zip(

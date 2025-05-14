@@ -1,10 +1,14 @@
+from typing import Any, Dict, List
+
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.chains.history_aware_retriever import create_history_aware_retriever
 from langchain.chains.retrieval import create_retrieval_chain
 from langchain_core.exceptions import LangChainException
 from langchain_core.prompts import PromptTemplate
 from langchain_core.vectorstores import VectorStoreRetriever
 from loguru import logger
 
+from business.clients.langsmith_client import LangSmithClient
 from business.clients.llm_client import LLMClient
 from business.schemas.llm import Response
 
@@ -17,7 +21,8 @@ class OrchestratorService:
     def __init__(
             self,
             llm_client: LLMClient,
-            retriever: VectorStoreRetriever
+            retriever: VectorStoreRetriever,
+            langsmith_client: LangSmithClient,
     ):
         """
         Initialize with injected service dependencies.
@@ -25,8 +30,9 @@ class OrchestratorService:
         self.llm_client = llm_client
         self.llm = llm_client.get_llm()
         self.retriever: VectorStoreRetriever = retriever
+        self.chat_history_prompt = langsmith_client.get_prompt("langchain-ai/chat-langchain-rephrase")
 
-    def response(self, query: str) -> Response:
+    def response(self, query: str, chat_history: List[Dict[str, Any]]) -> Response:
 
         rag_prompt = """
             You are a knowledgeable FHIR expert and assistant specializing in healthcare standards and protocols. 
@@ -44,6 +50,7 @@ class OrchestratorService:
         # Prepare template variables
         template_vars = {
             "input": query,
+            "chat_history": chat_history
         }
         rag_template = PromptTemplate(
             input_variables=["input", "context"],
@@ -53,14 +60,18 @@ class OrchestratorService:
         # Generate the response using LLM
         try:
             logger.info("Retrieval")
+            history_aware_retriever = create_history_aware_retriever(
+                llm=self.llm, retriever=self.retriever, prompt=self.chat_history_prompt
+            )
 
+            logger.info("Augmentation")
             combine_docs_chain = create_stuff_documents_chain(
                 self.llm, rag_template
             )
-            retrieval_chain = create_retrieval_chain(retriever=self.retriever, combine_docs_chain=combine_docs_chain)
+            retrieval_chain = create_retrieval_chain(retriever=history_aware_retriever,
+                                                     combine_docs_chain=combine_docs_chain)
 
             logger.info("Generation")
-
             response = retrieval_chain.invoke(input=template_vars)
             return Response(
                 input=response["input"],
