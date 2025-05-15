@@ -1,6 +1,7 @@
 # LangChain - Develop LLM powered applications with LangChain
 
-This repository contains multiple projects built using LangChain for
+This repository contains multiple projects built
+for [LangChain - Develop LLM powered applications with LangChain Course](https://www.udemy.com/course/langchain/)
 
 # Getting Started
 
