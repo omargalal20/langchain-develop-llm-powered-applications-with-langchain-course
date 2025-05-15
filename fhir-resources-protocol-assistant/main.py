@@ -19,9 +19,9 @@ if __name__ == "__main__":
     service = OrchestratorService(llm_client=llm_client, retriever=retriever, langsmith_client=langsmith_client)
 
     correct_query: str = "Give me a real test example of a MedicationRequest resource in FHIR?"
-    response: Response = service.response(query=correct_query)
+    response: Response = service.response(query=correct_query, chat_history=[])
     logger.info(f"Correct Query Response: {response.answer}")
 
     wrong_query = "How many implementation guides are available for FHIR in the current version?"
-    response: Response = service.response(query=wrong_query)
+    response: Response = service.response(query=wrong_query, chat_history=[])
     logger.info(f"Wrong Query Response: {response.answer}")
