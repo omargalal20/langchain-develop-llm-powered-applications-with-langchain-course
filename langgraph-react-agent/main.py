@@ -35,7 +35,7 @@ if __name__ == "__main__":
 
     graph.get_graph().draw_mermaid_png(output_file_path="graph.png")
 
-    query_prompt = "What is the weather in SF? List it and then Triple it."
+    query_prompt = "What is the weather in SF in Fahrenheit? List it and then triple it."
     response = graph.invoke({"messages": [{"role": "user", "content": query_prompt}]},
                             {"recursion_limit": recursion_limit}, debug=True)
     logger.info(response["messages"][-1].content)
