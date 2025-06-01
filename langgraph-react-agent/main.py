@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from langchain_core.messages import HumanMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.prebuilt import ToolNode, tools_condition
 from langsmith import Client
@@ -35,7 +36,7 @@ if __name__ == "__main__":
 
     graph.get_graph().draw_mermaid_png(output_file_path="graph.png")
 
-    query_prompt = "What is the weather in SF in Fahrenheit? List it and then triple it."
-    response = graph.invoke({"messages": [{"role": "user", "content": query_prompt}]},
+    messages = [HumanMessage(content="What is the weather in SF in Fahrenheit? List it and then triple it.")]
+    response = graph.invoke({"messages": messages},
                             {"recursion_limit": recursion_limit}, debug=True)
     logger.info(response["messages"][-1].content)
